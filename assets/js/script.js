@@ -1,51 +1,105 @@
 'use strict';
 
 /**
- * navbar variables
+ * element toggle function
  */
 
-const navOpenBtn = document.querySelector("[data-menu-open-btn]");
-const navCloseBtn = document.querySelector("[data-menu-close-btn]");
+const elemToggleFunc = function (elem) { elem.classList.toggle("active"); }
+
+
+
+/**
+ * header sticky & go to top
+ */
+
+const header = document.querySelector("[data-header]");
+const goTopBtn = document.querySelector("[data-go-top]");
+
+window.addEventListener("scroll", function () {
+
+  if (window.scrollY >= 10) {
+    header.classList.add("active");
+    goTopBtn.classList.add("active");
+  } else {
+    header.classList.remove("active");
+    goTopBtn.classList.remove("active");
+  }
+
+});
+
+
+
+/**
+ * navbar toggle
+ */
+
+const navToggleBtn = document.querySelector("[data-nav-toggle-btn]");
 const navbar = document.querySelector("[data-navbar]");
-const overlay = document.querySelector("[data-overlay]");
 
-const navElemArr = [navOpenBtn, navCloseBtn, overlay];
+navToggleBtn.addEventListener("click", function () {
 
-for (let i = 0; i < navElemArr.length; i++) {
+  elemToggleFunc(navToggleBtn);
+  elemToggleFunc(navbar);
+  elemToggleFunc(document.body);
 
-  navElemArr[i].addEventListener("click", function () {
+});
 
-    navbar.classList.toggle("active");
-    overlay.classList.toggle("active");
+
+
+/**
+ * skills toggle
+ */
+
+const toggleBtnBox = document.querySelector("[data-toggle-box]");
+const toggleBtns = document.querySelectorAll("[data-toggle-btn]");
+const skillsBox = document.querySelector("[data-skills-box]");
+
+for (let i = 0; i < toggleBtns.length; i++) {
+  toggleBtns[i].addEventListener("click", function () {
+
+    elemToggleFunc(toggleBtnBox);
+    for (let i = 0; i < toggleBtns.length; i++) { elemToggleFunc(toggleBtns[i]); }
+    elemToggleFunc(skillsBox);
 
   });
-
 }
 
 
 
 /**
- * header sticky functionality
+ * dark & light theme toggle
  */
 
-const header = document.querySelector("[data-header]");
+const themeToggleBtn = document.querySelector("[data-theme-btn]");
 
-window.addEventListener("scroll", function () {
+themeToggleBtn.addEventListener("click", function () {
 
-  window.scrollY >= 20 ? header.classList.add("active") : header.classList.remove("active");
+  elemToggleFunc(themeToggleBtn);
+
+  if (themeToggleBtn.classList.contains("active")) {
+    document.body.classList.remove("dark_theme");
+    document.body.classList.add("light_theme");
+
+    localStorage.setItem("theme", "light_theme");
+  } else {
+    document.body.classList.add("dark_theme");
+    document.body.classList.remove("light_theme");
+
+    localStorage.setItem("theme", "dark_theme");
+  }
 
 });
-
-
 
 /**
- * go top
+ * check & apply last time selected theme from localStorage
  */
 
-const goTopBtn = document.querySelector("[data-go-top]");
-
-window.addEventListener("scroll", function () {
-
-  window.scrollY >= 800 ? goTopBtn.classList.add("active") : goTopBtn.classList.remove("active");
-
-});
+if (localStorage.getItem("theme") === "light_theme") {
+  themeToggleBtn.classList.add("active");
+  document.body.classList.remove("dark_theme");
+  document.body.classList.add("light_theme");
+} else {
+  themeToggleBtn.classList.remove("active");
+  document.body.classList.remove("light_theme");
+  document.body.classList.add("dark_theme");
+}
